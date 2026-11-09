@@ -109,6 +109,9 @@ def play_game(name):
 
     show_final_result(name, my_wins ,computer_wins)
     show_records(recoeds)
+
+    # 플레이어가 승리하면 True
+    return my_wins == GOAL_WINSS
     
 
 
@@ -116,9 +119,21 @@ def play_game(name):
 def main():
     show_title()
     name = ask_name()
-    play_game(name)
+    # play_game(name)
+    # 연승 기록을 위한 변수
+    co_wins = 0
+
 
     while True:
+        my_won = play_game(name)
+        if my_won:
+            co_wins += 1    # 연승기록 누적
+            print(f"\n현재 연승: {co_wins}연승")
+        else:
+            co_wins = 0     # 연승기록 초기화
+
+        
+
         if not ask_play_again() :
             break
             
