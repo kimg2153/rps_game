@@ -56,10 +56,39 @@ def show_result(name,user_number,computer_number, result) :
 def show_score(name, my_wins, computer_wins):
     print(f"\n현재 스코어 {name} {my_wins} : {computer_wins} 컴퓨터\n") # 게스트 1 : 0 컴퓨터 
 
+# 최종 결과 표시
+def show_final_result(name, my_wins, computer_wins):
+    print("-"*40)
+    print(f"[최종 결과] {name} {my_wins} : {computer_wins} 컴퓨터")
+    if my_wins > computer_wins:
+        print(f"==> {name} 최종 승리!")
+    else:
+        print("==> 컴퓨터 승리!")
+
+# 승패 판결 목록 표시
+def show_records(recoeds) :
+    print("\n[판별 승패 목록]")
+    # "1 판 : 가위 vs 바위 => 패배"
+    # "2 판 : 가위 vs 바위 => 패배"
+    # "3 판 : 가위 vs 바위 => 패배"
+    for number, recoed in enumerate(recoeds , start=1):
+        print(f"{number}판: {recoed}")
+
+# 게임 재시작 여부
+def ask_play_again():
+    while True:
+        answer = input("\n다시 도전 (yes/no) : ").strip().lower()
+        if answer == "yes" or answer == "y":
+            return True
+        if answer == "no" or answer == "n" :
+            return False
+        print("yes 또는 no 입력해주세요.")
+
 # 게임 루프 (3판 2선승제)
 def play_game(name):
     my_wins = 0
     computer_wins = 0
+    recoeds = [] # 승패 기록할 리스트
     # 둘 다 2승이 안됬을 때 다음 판을 진행
     while my_wins < GOAL_WINSS and computer_wins < GOAL_WINSS:
         user_number = ask_number()
@@ -71,8 +100,16 @@ def play_game(name):
             my_wins += 1
         elif result == "패배":
             computer_wins += 1
-        show_score(name, my_wins ,computer_wins)
+
+        #승패 결과 목록에 저장
+        recoeds.append(f"{HANDS[user_number]} vs {HANDS[computer_number]} => {result}")
+        
         show_result(name,user_number,computer_number, result)
+        show_score(name, my_wins ,computer_wins)
+
+    show_final_result(name, my_wins ,computer_wins)
+    show_records(recoeds)
+    
 
 
 # 게임의 전체 루프
@@ -80,6 +117,15 @@ def main():
     show_title()
     name = ask_name()
     play_game(name)
+
+    while True:
+        if not ask_play_again() :
+            break
+            
+
+    print("게임을 종료합니다.")
+
+    
     # print(f"{name}님, 컴퓨터는 {HANDS[computer_number]}를 냈습니다.")
     
 # 게임 시작
